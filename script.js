@@ -27,6 +27,7 @@ const muatData = () => {
     if (data !== null) {
         tugas = JSON.parse(data).filter((item) => item !== null);
     }
+      terpilih = [];
 };
 
 //TAMBAH TUGAS
