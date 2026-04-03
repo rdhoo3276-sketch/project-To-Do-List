@@ -2,6 +2,7 @@
 let tugas = []
 let filterAktif = "semua"; //filter yang aktif sekarang
 let dragIndex = null;      //index tugas yang sedang di drag
+let terpilih = [];   //menyimpan tugas yang disimpan
 
 //DARK MODE
 const toggleDarkMode = () => {
@@ -145,8 +146,58 @@ const batalEdit = () => {
      }, 2500);
  };
 
+ // TOGGLE PILIH TUGAS
+    const togglePilih = (id) => {
+        if (terpilih.includes(id)) {
+            terpilih = terpilih.filter((t) => t !== id);
+        } else {
+            terpilih.push(id);
+        }
+        updateBulkAction();
+        tampilTugas();
+    };
+
+    //UPDATE TAMPILAN BULK ACTION
+    const updateBulkAction = () => {
+        const bulk = document.getElementById("bulkAction");
+        bulk.style.display = terpilih.length> 0 ? "flex" : "none";
+    };
+
+    //SELECT ALL
+    const selectAll = () => {
+        if (terpilih.length === tugas.length) {
+            terpilih = [];
+        } else {
+            terpilih = tugas.map((t) => t.id);
+        }
+        updateBulkAction();
+        tampilTugas();
+    };
+
+    //HAPUS TERPILIH
+    const hapusTerpilih = () => {
+        tugas = tugas.filter((t) => !terpilih.includes(t.id));
+        terpilih = [];
+        updateBulkAction();
+        simpanData();
+        tampilTugas();
+    };
+
+    //SELESAIKAN TERPILIH
+    const selesaikanTerpilih = () => {
+        tugas = tugas.map((t) => {
+            if (terpilih.includes(t.id)) t.selesai = true;
+            return t;
+        });
+        terpilih = [];
+        updateBulkAction();
+        simpanData();
+        tampilTugas();
+    };
+
 //TAMPIL TUGAS 
 const tampilTugas = () => {
+    updateBulkAction();
     const listTugas = document.getElementById("listTugas");
     const info = document.getElementById("info");
     const progress = document.getElementById("progress");
@@ -162,14 +213,14 @@ const tampilTugas = () => {
         tugasTampil = tugas.filter((item) => item.selesai);
     } else if (filterAktif === "belum") {
         tugasTampil = tugas.filter((item) => !item.selesai);
-    }
+    };
 
     if (tugasTampil.length === 0) {
         info.style.display = "block";
         listTugas.innerHTML = "";
         return;
 
-    }
+    };
 
         info.style.display = "none";
         listTugas.innerHTML = "";
@@ -214,17 +265,24 @@ const tampilTugas = () => {
             }
 
             div.innerHTML = `
-            <span>${item.teks}</span><br>${hari}
-            <div>
-                <button class="btn-edit"  onclick="editTugas(${item.id})">Edit</button>
-                <button class="btn-selesai" onclick="selesaikanTugas(${item.id})">
-                ${item.selesai ? "Batal" : "Selesai"}
-                </button>
-                <button class="btn-hapus" onclick="hapusTugas(${item.id})">
-                Hapus
-                </button>
+            <div style="display:flex; align-items:center; gap:10px;">
+                 <input type="checkbox" 
+                    ${terpilih.includes(item.id) ? "checked" : ""} 
+                     onclick="togglePilih(${item.id})">
+                 <div>
+                     <span>${item.teks}</span><br>${hari}
             </div>
-            `;
+        </div>
+        <div>
+            <button class="btn-edit" onclick="editTugas(${item.id})">Edit</button>
+            <button class="btn-selesai" onclick="selesaikanTugas(${item.id})">
+            ${item.selesai ? "Batal" : "Selesai"}
+         </button>
+        <button class="btn-hapus" onclick="hapusTugas(${item.id})">
+            Hapus
+          </button>
+        </div>
+        `;
             listTugas.appendChild(div);
         });
 };
