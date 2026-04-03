@@ -124,6 +124,20 @@
                z-index: 9999;
             }
 
+            #bulkAction button {
+                padding: 6px 12px;
+                font-size: 15px;
+            }
+
+            #bulkAction {
+                display: none;
+                gap: 8px;
+                margin-bottom: 15px;
+                margin-top: 5px;
+                align-items: center;
+                flex-wrap: wrap;
+            }
+
             .tugas-item {
                 display: flex;
                 justify-content: space-between;
@@ -339,6 +353,14 @@
                 <button onclick="filterTugas('belum')" id="btn-belum">Belum</button>
                 <button onclick="filterTugas('selesai')" id="btn-selesai-filter">Selesai</button>
             </div>
+
+            <!--select all-->
+            <div id="bulkAction">
+                <button onclick="selectAll()" id="btnSelectAll">☑️ select All</button>
+                <button onclick="hapusTerpilih()" style="background: #c0392b;">🗑️ Hapus Terpilih</button>
+                <button onclick="selesaikanTerpilih()" style="background: green;">✅ Pilih Selesai</button>
+            </div>
+
             <div id="listTugas"></div>
             <p class="info" id="info">Belum ada tugas!</p>
         </div>
