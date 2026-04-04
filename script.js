@@ -267,7 +267,7 @@ const tampilTugas = () => {
 
             div.innerHTML = `
             <div style="display:flex; align-items:center; gap:5px; width:100%;">
-                 <input type="checkbox" 
+                 <input type="checkbox">
                     ${terpilih.includes(item.id) ? "checked" : ""} 
                      onclick="togglePilih(${item.id})">
                  <div>
